@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Results</title>
+</head>
+<body class="bg-gray-100 p-6 text-gray-900">
+    {% include 'navbar.html' %}
+
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded shadow">
+        <h2 class="text-2xl font-bold mb-6">Voting Results</h2>
+
+        <canvas id="resultsChart" class="mb-8"></canvas>
+
+        <ul class="list-disc pl-6 space-y-2">
+            {% for candidate, count in votes.items() %}
+                <li><strong>{{ candidate }}</strong>: {{ count }} vote(s)</li>
+            {% endfor %}
+        </ul>
+
+        <div class="mt-6">
+            <a href="/" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Back to Vote</a>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('resultsChart').getContext('2d');
+        const resultsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ votes.keys()|list|tojson }},
+                datasets: [{
+                    label: 'Vote Count',
+                    data: {{ votes.values()|list|tojson }},
+                    backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        stepSize: 1
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
