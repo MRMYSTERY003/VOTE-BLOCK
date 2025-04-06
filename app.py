@@ -25,6 +25,7 @@ def vote():
 
         blockchain.add_vote(voter_id, candidate)
         blockchain.mark_voted(voter_id)
+        blockchain.mine_block()
         return render_template('index.html', success="Your vote has been recorded successfully!", candidates=blockchain.get_candidates())
 
     # GET request
@@ -40,6 +41,7 @@ def mine():
 @app.route('/result')
 def result():
     votes = blockchain.get_vote_count()
+    print("Votes:", votes)
     return render_template('result.html', votes=votes)
 
 @app.route('/login', methods=['GET', 'POST'])
